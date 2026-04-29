@@ -71,7 +71,7 @@ This script uses the following defaults:
 The main pipeline runs inside a Singularity container.  
 All required binaries and environments are pre-installed in the container.
 
-### 📌 Required Input (IMPORTANT)
+####  Required Input (IMPORTANT)
 
 The pipeline fundamentally operates on four input directories defined per case:
 
@@ -97,7 +97,7 @@ OUTPUT_ROOT="${CASE_DIR}/output"
 
 ---
 
-### 📌 Advanced Command-Line Configuration
+#### 📌 Advanced Command-Line Configuration
 
 The pipeline runs inside a Singularity container. Internal binaries and databases are pre-configured.
 
@@ -132,7 +132,7 @@ The pipeline runs inside a Singularity container. Internal binaries and database
 
 ---
 
-### 📁 Project Structure
+#### 📁 Project Structure
 
 ```text
 DeepUMQA-Global/
@@ -157,8 +157,6 @@ DeepUMQA-Global/
 * User-level required inputs: **PDB_ROOT / QUERY_ROOT / FEATURE_ROOT / OUTPUT_ROOT**
 * Everything else: **container + database configuration (advanced)**
 * Default mode: `bash bin/run_pipeline.sh`
-
----
 
 ---
 
