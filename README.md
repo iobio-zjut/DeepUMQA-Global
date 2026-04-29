@@ -8,7 +8,7 @@ DeepUMQA-Global is a deep learning framework for estimating the fold accuracy of
 
 ## 🚀 **Getting Started**
 
-### 📥**🔧 Software Requirements**
+### **🔧 Software Requirements**
 
 To run this project, you need the following dependencies installed **(or use the provided Singularity container)**:
 
@@ -29,7 +29,7 @@ To run this project, you need the following dependencies installed **(or use the
  
 > Alternatively, you can run everything inside a [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) to avoid dependency issues (container size: 6.64 GB).
  
-### 2.📥**🔧 Data Preparation**
+### **📥 Data Preparation**
 
 - **PDB100**([PDB100](https://steineggerlab.s3.amazonaws.com/foldseek/pdb100.tar.gz))
   - Template database for SAGS feature extraction (complex)
@@ -44,6 +44,27 @@ To run this project, you need the following dependencies installed **(or use the
 ```
 git clone --recursive https://github.com/iobio-zjut/DeepUMQA-Global 
 ```
+---
+
+### Directory Structure
+
+```text
+DeepUMQA-G_github/
+├── run_dual_inference.py
+├── bin/
+│   └── run_pipeline.sh
+├── checkpoints/
+│   └── val_best-epoch=26-val_loss=0.00057.ckpt
+├── structure_rank/
+├── example/
+│   ├── pdb/
+│   ├── query/
+│   ├── feature/
+│   └── output/
+├── requirements.txt
+```
+
+---
 
 ### ⚡ Quick Start
 
@@ -57,7 +78,7 @@ This script uses the following defaults:
 
 * `./example/pdb`
 * `./example/query`
-* `./example/feature`
+* `./example/feature`  # have extracted
 * `./example/output`
 * `./checkpoints`
 
@@ -87,7 +108,7 @@ python run_dual_inference.py \
 
 If you download the Singularity container, you can run as:
 ```bash
-python run_dual_inference.py \
+bash run_pipeline.sh \
   --pdb-root ./example/pdb \
   --query-root ./example/query \
   --feature-root ./example/feature \
