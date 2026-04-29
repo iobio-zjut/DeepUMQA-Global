@@ -54,22 +54,19 @@ git clone --recursive https://github.com/iobio-zjut/DeepUMQA-Global
 Run directly:
 
 ```bash
-bash bin/run_pipeline.sh
+bash bin/run_quickstart.sh
 ```
 
 This script uses the following defaults:
 
 * `./example/pdb`
 * `./example/query`
-* `./example/feature`  # have extracted
+* `./example/feature`  # have existed
 * `./example/output`
 * `./checkpoints`
 
 
 ### 📌 Command-Line Usage
----
-The main pipeline runs inside a Singularity container.  
-All required binaries and environments are pre-installed in the container.
 
 ####  Required Input (IMPORTANT)
 
@@ -89,19 +86,17 @@ OUTPUT_ROOT="${CASE_DIR}/output"
 | Variable       | Description                                                      |
 | -------------- | ---------------------------------------------------------------- |
 | `PDB_ROOT`     | Input protein structure files (PDB/mmCIF)                        |
-| `QUERY_ROOT`   | Query target list or metadata for evaluation                     |
-| `FEATURE_ROOT` | Precomputed structural/sequence features (required for speed-up) |
+| `QUERY_ROOT`   | Query model generate by AlphaFold Server                         |
+| `FEATURE_ROOT` | Precomputed features (if have existed)                           |
 | `OUTPUT_ROOT`  | Output directory for predicted scores and intermediate results   |
-
-> ⚠️ These four paths define a **single evaluation case** and are the ONLY required user-facing inputs for inference.
 
 ---
 
-#### 📌 Advanced Command-Line Configuration
+####  Advanced Command-Line Configuration
 
 The pipeline runs inside a Singularity container. Internal binaries and databases are pre-configured.
 
-#### 🧱 Environment Variables (Container Runtime)
+####  Environment Variables (Container Runtime)
 
 | Variable                    | Description                                                            |
 | --------------------------- | ---------------------------------------------------------------------- |
@@ -114,13 +109,13 @@ The pipeline runs inside a Singularity container. Internal binaries and database
 
 ---
 
-#### 🧠 External Database Paths
+####  External Database Paths
 
 | Variable                         | Description                                  |
 | -------------------------------- | -------------------------------------------- |
-| `DEFAULT_SP_TEMPLATE_DB`         | PDB100 Foldseek database (complex templates) |
-| `DEFAULT_SP_MONOMER_TEMPLATE_DB` | PDB_AFDB_207187 monomer template database    |
-| `DEFAULT_AFDB_DIR`               | AlphaFold DB structure repository            |
+| `DEFAULT_SP_TEMPLATE_DB`         | PATH of PDB100 Foldseek database             |
+| `DEFAULT_SP_MONOMER_TEMPLATE_DB` | PATH of PDB_AFDB_207187 database             |
+| `DEFAULT_AFDB_DIR`               | PATH of PDB_AFDB_db Foldseek database        |
 
 ---
 
@@ -138,7 +133,7 @@ The pipeline runs inside a Singularity container. Internal binaries and database
 DeepUMQA-Global/
 ├── run_dual_inference.py
 ├── bin/
-│   ├── run_pipeline.sh
+│   ├── run_DeepUMQAGlobal.sh
 │   └── run_quickstart.sh
 ├── checkpoints/
 │   └── best.ckpt
@@ -150,14 +145,11 @@ DeepUMQA-Global/
 │   └── output/
 ```
 
----
+### Running
 
-### ⚡ Summary
-
-* User-level required inputs: **PDB_ROOT / QUERY_ROOT / FEATURE_ROOT / OUTPUT_ROOT**
-* Everything else: **container + database configuration (advanced)**
-* Default mode: `bash bin/run_pipeline.sh`
-
+```bash
+bash bin/run_DeepUMQAGlobal.sh
+```
 ---
 
 ## 📚 Resources
