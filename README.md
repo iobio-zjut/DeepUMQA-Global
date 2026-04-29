@@ -27,7 +27,7 @@ To run this project, you need the following dependencies installed **(or use the
 - **ProteinMPNN** ([GitHub](https://github.com/dauparas/ProteinMPNN)) | [MIT](https://opensource.org/license/mit)  
   - Installed in a conda environment named `MPNN`
  
-Download [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) (container size: 6.64 GB).
+**Download [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) (container size: 6.64 GB).**
  
 ### **📥 Data Preparation**
 
@@ -74,6 +74,8 @@ DEEPUMQA_PYTHON_BIN=/path/to/python bash bin/run_pipeline.sh
 
 ## 📌 Command-Line Usage
 ---
+The main pipeline runs inside a Singularity container.  
+All required binaries and environments are pre-installed in the container.
 
 ### Directory Structure
 
@@ -93,6 +95,49 @@ DeepUMQA-G_github/
 │   └── output/
 ```
 
+---
+
+### 🧱 Environment Configuration
+
+The following variables define the runtime environment and paths inside/outside the container:
+
+| Variable | Description |
+|----------|------------|
+| `SCRIPT_DIR` | Directory of the pipeline script |
+| `LOCAL_PROJECT_DIR` | Local project directory on the host machine. **Must be mounted into the container** |
+| `CONTAINER_PROJECT_MOUNT` | Mount point inside container (`/repo`) |
+| `PYTHON_BIN_IN_CONTAINER` | Python executable inside container |
+| `FOLDSEEK_BIN_IN_CONTAINER` | Foldseek binary inside container (multimer version) |
+| `VORO_EXE_DIR_IN_CONTAINER` | Voronota executable directory inside container |
+
+---
+
+### 📚 External Databases (Required)
+
+These paths point to pre-downloaded template and reference databases:
+
+| Variable | Description |
+|----------|------------|
+| `DEFAULT_SP_TEMPLATE_DB` | Path of Foldseek PDB100 database |
+| `DEFAULT_SP_MONOMER_TEMPLATE_DB` | Path of PDB_AFDB_207187 |
+| `DEFAULT_AFDB_DIR` | Path of PDB_AFDB_db |
+
+---
+
+### ⚠️ Important Notes
+
+- `LOCAL_PROJECT_DIR` must be correctly set and mounted into the container at runtime.
+- All other paths inside the container should **not be modified unless necessary**.
+- The pipeline assumes Singularity execution by default.
+
+---
+
+### ⚡ Quick Start
+
+Run the pipeline using default settings:
+
+```bash
+bash bin/run_pipeline.sh
 
 ---
 
