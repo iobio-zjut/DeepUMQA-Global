@@ -45,8 +45,6 @@ Download [Singularity container](https://zenodo.org/api/records/19888061/draft/f
 git clone --recursive https://github.com/iobio-zjut/DeepUMQA-Global 
 ```
 
----
-
 ### ⚡ Quick Start
 
 Run directly:
@@ -90,6 +88,7 @@ DeepUMQA-G_github/
 │   ├── feature/
 │   └── output/
 ```
+
 
 ---
 
