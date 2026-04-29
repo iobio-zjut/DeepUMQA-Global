@@ -29,7 +29,7 @@ To run this project, you need the following dependencies installed **(or use the
  
 **Download [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) (container size: 6.64 GB).**
  
-### **📥 Data Preparation**
+### **📥 Data Preparation (Required)**
 
 - **PDB100**([PDB100](https://steineggerlab.s3.amazonaws.com/foldseek/pdb100.tar.gz))
   - Template database for SAGS feature extraction (complex)
@@ -65,25 +65,80 @@ This script uses the following defaults:
 * `./example/output`
 * `./checkpoints`
 
-If your default `python` is not the desired environment:
 
-```bash
-DEEPUMQA_PYTHON_BIN=/path/to/python bash bin/run_pipeline.sh
-```
-
-
-## 📌 Command-Line Usage
+### 📌 Command-Line Usage
 ---
 The main pipeline runs inside a Singularity container.  
 All required binaries and environments are pre-installed in the container.
 
-### Directory Structure
+### 📌 Required Input (IMPORTANT)
+
+The pipeline fundamentally operates on four input directories defined per case:
+
+```bash
+CASE_DIR=/path/to/case
+
+PDB_ROOT="${CASE_DIR}/pdb"
+QUERY_ROOT="${CASE_DIR}/query"
+FEATURE_ROOT="${CASE_DIR}/feature"
+OUTPUT_ROOT="${CASE_DIR}/output"
+```
+
+#### 📂 Meaning of Inputs
+
+| Variable       | Description                                                      |
+| -------------- | ---------------------------------------------------------------- |
+| `PDB_ROOT`     | Input protein structure files (PDB/mmCIF)                        |
+| `QUERY_ROOT`   | Query target list or metadata for evaluation                     |
+| `FEATURE_ROOT` | Precomputed structural/sequence features (required for speed-up) |
+| `OUTPUT_ROOT`  | Output directory for predicted scores and intermediate results   |
+
+> ⚠️ These four paths define a **single evaluation case** and are the ONLY required user-facing inputs for inference.
+
+---
+
+### 📌 Advanced Command-Line Configuration
+
+The pipeline runs inside a Singularity container. Internal binaries and databases are pre-configured.
+
+#### 🧱 Environment Variables (Container Runtime)
+
+| Variable                    | Description                                                            |
+| --------------------------- | ---------------------------------------------------------------------- |
+| `SCRIPT_DIR`                | Location of pipeline scripts                                           |
+| `LOCAL_PROJECT_DIR`         | Project directory on host machine (**must be mounted into container**) |
+| `CONTAINER_PROJECT_MOUNT`   | Mount point inside container (default: `/repo`)                        |
+| `PYTHON_BIN_IN_CONTAINER`   | Python interpreter inside container                                    |
+| `FOLDSEEK_BIN_IN_CONTAINER` | Foldseek binary (multimer version)                                     |
+| `VORO_EXE_DIR_IN_CONTAINER` | Voronota executable directory                                          |
+
+---
+
+#### 🧠 External Database Paths
+
+| Variable                         | Description                                  |
+| -------------------------------- | -------------------------------------------- |
+| `DEFAULT_SP_TEMPLATE_DB`         | PDB100 Foldseek database (complex templates) |
+| `DEFAULT_SP_MONOMER_TEMPLATE_DB` | PDB_AFDB_207187 monomer template database    |
+| `DEFAULT_AFDB_DIR`               | AlphaFold DB structure repository            |
+
+---
+
+#### ⚠️ Notes
+
+* `LOCAL_PROJECT_DIR` must be correctly mounted into the container.
+* Only modify internal paths when deploying to a new cluster environment.
+* The pipeline is fully compatible with Singularity-based execution.
+
+---
+
+### 📁 Project Structure
 
 ```text
-DeepUMQA-G_github/
+DeepUMQA-Global/
 ├── run_dual_inference.py
 ├── bin/
-│   └── run_DeepUMQAGlobal.sh
+│   ├── run_pipeline.sh
 │   └── run_quickstart.sh
 ├── checkpoints/
 │   └── best.ckpt
@@ -97,51 +152,17 @@ DeepUMQA-G_github/
 
 ---
 
-### 🧱 Environment Configuration
+### ⚡ Summary
 
-The following variables define the runtime environment and paths inside/outside the container:
-
-| Variable | Description |
-|----------|------------|
-| `SCRIPT_DIR` | Directory of the pipeline script |
-| `LOCAL_PROJECT_DIR` | Local project directory on the host machine. **Must be mounted into the container** |
-| `CONTAINER_PROJECT_MOUNT` | Mount point inside container (`/repo`) |
-| `PYTHON_BIN_IN_CONTAINER` | Python executable inside container |
-| `FOLDSEEK_BIN_IN_CONTAINER` | Foldseek binary inside container (multimer version) |
-| `VORO_EXE_DIR_IN_CONTAINER` | Voronota executable directory inside container |
+* User-level required inputs: **PDB_ROOT / QUERY_ROOT / FEATURE_ROOT / OUTPUT_ROOT**
+* Everything else: **container + database configuration (advanced)**
+* Default mode: `bash bin/run_pipeline.sh`
 
 ---
 
-### 📚 External Databases (Required)
-
-These paths point to pre-downloaded template and reference databases:
-
-| Variable | Description |
-|----------|------------|
-| `DEFAULT_SP_TEMPLATE_DB` | Path of Foldseek PDB100 database |
-| `DEFAULT_SP_MONOMER_TEMPLATE_DB` | Path of PDB_AFDB_207187 |
-| `DEFAULT_AFDB_DIR` | Path of PDB_AFDB_db |
-
 ---
 
-### ⚠️ Important Notes
-
-- `LOCAL_PROJECT_DIR` must be correctly set and mounted into the container at runtime.
-- All other paths inside the container should **not be modified unless necessary**.
-- The pipeline assumes Singularity execution by default.
-
----
-
-### ⚡ Quick Start
-
-Run the pipeline using default settings:
-
-```bash
-bash bin/run_pipeline.sh
-
----
-
-### 📚 Resources
+## 📚 Resources
 
 [CASP16 EMA Data](https://predictioncenter.org/download_area/CASP16/)
 Includes predicted models, experimental structures, and EMA results.
