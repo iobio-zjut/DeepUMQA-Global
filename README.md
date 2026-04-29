@@ -62,7 +62,6 @@ This script uses the following defaults:
 * `./example/pdb`
 * `./example/query`
 * `./example/feature`  — have existed
-- `./example/feature`    — precomputed features (already generated)  
 * `./example/output`
 * `./checkpoints`
 
