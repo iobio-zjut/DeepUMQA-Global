@@ -8,13 +8,44 @@ DeepUMQA-Global is a deep learning framework for estimating the fold accuracy of
 
 ## 🚀 **Getting Started**
 
-### 1.🛠**Download DeepAAAssembly package**
+### 📥**🔧 Software Requirements**
+
+To run this project, you need the following dependencies installed **(or use the provided Singularity container)**:
+
+- Python ≥ 3.8  
+- PyTorch 1.11.0  
+- PyTorch Geometric 2.0.4
+- biopython==1.78
+- numpy==1.18.5
+- pandas==1.3.5
+- scipy==1.7.3
+- PyRosetta ≥ 2021.38+release.4d5a969
+- **Voronota** ([GitHub](https://github.com/kliment-olechnovic/voronota?tab=MIT-1-ov-file)) | [MIT](https://opensource.org/license/mit)
+  - Installed in a conda environment named `vorolf` 
+- **Foldseek** ([GitHub](https://github.com/steineggerlab/foldseek)) | [GPL-3.0](https://opensource.org/licenses/GPL-3.0)  
+  - Installed in a conda environment named `foldseek-multimer`  
+- **ProteinMPNN** ([GitHub](https://github.com/dauparas/ProteinMPNN)) | [MIT](https://opensource.org/license/mit)  
+  - Installed in a conda environment named `MPNN`
+ 
+> Alternatively, you can run everything inside a [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) to avoid dependency issues (container size: 6.64 GB).
+ 
+### 2.📥**🔧 Data Preparation**
+
+- **PDB100**([PDB100](https://steineggerlab.s3.amazonaws.com/foldseek/pdb100.tar.gz))
+  - Template database for SAGS feature extraction (complex)
+- **PDB_AFDB_207187**([PDB_AFDB_207187](http://zhanglab-bioinf.com/PAthreader/database/PDB_AFDB_207187.tar))
+  - Template database for SAGS feature extraction (monomer)
+
+---
+
+## 🏃 Running the Pipeline
+### 🛠**Download DeepUMQA-Global package**
 
 ```
-git clone --recursive https://github.com/iobio-zjut/DeepAAAssembly 
+git clone --recursive https://github.com/iobio-zjut/DeepUMQA-Global 
 ```
 
-#### Quick Start
+### ⚡ Quick Start
 
 Run directly:
 
@@ -36,40 +67,54 @@ If your default `python` is not the desired environment:
 DEEPUMQA_PYTHON_BIN=/path/to/python bash bin/run_pipeline.sh
 ```
 
+
+## 📌 Command-Line Usage
+
+To explicitly specify Python environments:
+
+```bash
+python run_dual_inference.py \
+  --pdb-root ./example/pdb \
+  --query-root ./example/query \
+  --feature-root ./example/feature \
+  --output-root ./example/output \
+  --ckpt-path ./checkpoints \
+  --python-bin /path/to/python \
+  --mpnn-python /path/to/python \
+  --voro-python /path/to/python \
+  --pyrosetta-python /path/to/python
+```
+
+If you download the Singularity container, you can run as:
+```bash
+python run_dual_inference.py \
+  --pdb-root ./example/pdb \
+  --query-root ./example/query \
+  --feature-root ./example/feature \
+  --output-root ./example/output \
+  --ckpt-path ./checkpoints
+```
 ---
 
-### 2.📥**🔧 Software Requirements**
+### Optional Environment Variables
 
-To run this project, you need the following dependencies installed **(or use the provided Singularity container)**:
+* `DEEPUMQA_PYTHON_BIN`
+* `DEEPUMQA_FOLDSEEK_BIN`
+* `DEEPUMQA_MPNN_PYTHON`
+* `DEEPUMQA_VORO_PYTHON`
+* `DEEPUMQA_PYROSETTA_PYTHON`
+* `DEEPUMQA_VORO_EXE_DIR`
+* `DEEPUMQA_SP_TEMPLATE_DB`
+* `DEEPUMQA_SP_MONOMER_TEMPLATE_DB`
+* `DEEPUMQA_AFDB_DIR`
 
-- Python ≥ 3.8  
-- PyTorch 1.11.0  
-- PyTorch Geometric 2.0.4  
-- PyRosetta ≥ 2021.38+release.4d5a969
-- **Voronota** ([GitHub](https://github.com/kliment-olechnovic/voronota?tab=MIT-1-ov-file)) | [MIT](https://opensource.org/license/mit)
-  - Installed in a conda environment named `vorolf` 
-- **Foldseek** ([GitHub](https://github.com/steineggerlab/foldseek)) | [GPL-3.0](https://opensource.org/licenses/GPL-3.0)  
-  - Installed in a conda environment named `foldseek-multimer`  
-- **ProteinMPNN** ([GitHub](https://github.com/dauparas/ProteinMPNN)) | [MIT](https://opensource.org/license/mit)  
-  - Installed in a conda environment named `MPNN`
- 
-> Alternatively, you can run everything inside a [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) to avoid dependency issues (container size: 6.64 GB).
- 
-### 2.📥**🔧 Data Preparation**
+The `bin/run_pipeline.sh` script also supports overriding example paths:
 
-- **PDB100**([PDB100](https://steineggerlab.s3.amazonaws.com/foldseek/pdb100.tar.gz))
-  - Template database for SAGS feature extraction (complex)
-- **PDB_AFDB_207187**([PDB_AFDB_207187](http://zhanglab-bioinf.com/PAthreader/database/PDB_AFDB_207187.tar))
-  - Template database for SAGS feature extraction (monomer)
-
-
-
----
-
-
-
-
-
+* `DEEPUMQA_PDB_ROOT`
+* `DEEPUMQA_QUERY_ROOT`
+* `DEEPUMQA_FEATURE_ROOT`
+* `DEEPUMQA_OUTPUT_ROOT`
+* `DEEPUMQA_CKPT_PATH`
 
 
 ---
@@ -80,6 +125,8 @@ To run this project, you need the following dependencies installed **(or use the
 Includes predicted models, experimental structures, and EMA results.
 
 [PDB-2024 Targets](https://www.rcsb.org/): Estimation for docking-based models.
+
+[CoDNaS](http://ufq.unq.edu.ar/codnas/): Estimation for alternative conformational states proteins.
 
 ---
 
