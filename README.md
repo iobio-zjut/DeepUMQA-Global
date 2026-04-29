@@ -27,7 +27,7 @@ To run this project, you need the following dependencies installed **(or use the
 - **ProteinMPNN** ([GitHub](https://github.com/dauparas/ProteinMPNN)) | [MIT](https://opensource.org/license/mit)  
   - Installed in a conda environment named `MPNN`
  
-> Alternatively, you can run everything inside a [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) to avoid dependency issues (container size: 6.64 GB).
+Download [Singularity container](https://zenodo.org/api/records/19888061/draft/files/DeepUMQAGlobal.sif/content) (container size: 6.64 GB).
  
 ### **📥 Data Preparation**
 
@@ -43,25 +43,6 @@ To run this project, you need the following dependencies installed **(or use the
 
 ```
 git clone --recursive https://github.com/iobio-zjut/DeepUMQA-Global 
-```
----
-
-### Directory Structure
-
-```text
-DeepUMQA-G_github/
-├── run_dual_inference.py
-├── bin/
-│   └── run_pipeline.sh
-├── checkpoints/
-│   └── val_best-epoch=26-val_loss=0.00057.ckpt
-├── structure_rank/
-├── example/
-│   ├── pdb/
-│   ├── query/
-│   ├── feature/
-│   └── output/
-├── requirements.txt
 ```
 
 ---
@@ -90,53 +71,25 @@ DEEPUMQA_PYTHON_BIN=/path/to/python bash bin/run_pipeline.sh
 
 
 ## 📌 Command-Line Usage
-
-To explicitly specify Python environments:
-
-```bash
-python run_dual_inference.py \
-  --pdb-root ./example/pdb \
-  --query-root ./example/query \
-  --feature-root ./example/feature \
-  --output-root ./example/output \
-  --ckpt-path ./checkpoints \
-  --python-bin /path/to/python \
-  --mpnn-python /path/to/python \
-  --voro-python /path/to/python \
-  --pyrosetta-python /path/to/python
-```
-
-If you download the Singularity container, you can run as:
-```bash
-bash run_pipeline.sh \
-  --pdb-root ./example/pdb \
-  --query-root ./example/query \
-  --feature-root ./example/feature \
-  --output-root ./example/output \
-  --ckpt-path ./checkpoints
-```
 ---
 
-### Optional Environment Variables
+### Directory Structure
 
-* `DEEPUMQA_PYTHON_BIN`
-* `DEEPUMQA_FOLDSEEK_BIN`
-* `DEEPUMQA_MPNN_PYTHON`
-* `DEEPUMQA_VORO_PYTHON`
-* `DEEPUMQA_PYROSETTA_PYTHON`
-* `DEEPUMQA_VORO_EXE_DIR`
-* `DEEPUMQA_SP_TEMPLATE_DB`
-* `DEEPUMQA_SP_MONOMER_TEMPLATE_DB`
-* `DEEPUMQA_AFDB_DIR`
-
-The `bin/run_pipeline.sh` script also supports overriding example paths:
-
-* `DEEPUMQA_PDB_ROOT`
-* `DEEPUMQA_QUERY_ROOT`
-* `DEEPUMQA_FEATURE_ROOT`
-* `DEEPUMQA_OUTPUT_ROOT`
-* `DEEPUMQA_CKPT_PATH`
-
+```text
+DeepUMQA-G_github/
+├── run_dual_inference.py
+├── bin/
+│   └── run_DeepUMQAGlobal.sh
+│   └── run_quickstart.sh
+├── checkpoints/
+│   └── best.ckpt
+├── structure_rank/
+├── example/
+│   ├── pdb/
+│   ├── query/
+│   ├── feature/
+│   └── output/
+```
 
 ---
 
