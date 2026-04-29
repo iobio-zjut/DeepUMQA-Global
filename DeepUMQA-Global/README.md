@@ -1,13 +1,15 @@
 # DeepUMQA-Global
 
-DeepUMQA-Global 是一个单模型蛋白结构质量评估流程。对每个输入模型，程序最终输出两类分数：
+DeepUMQA-Global is a single-model protein structure quality assessment pipeline. For each input model, the program outputs two types of scores:
 
-- `global_score.csv`
-- `interface_score.csv`
+* `global_score.csv`
+* `interface_score.csv`
 
-当前开源版本已经整理为单机版流程，默认不依赖 SSH、SCP、远程节点切换或明文凭据。正式唯一主入口是根目录下的 `run_dual_inference.py`。
+The current open-source version has been refactored into a standalone local pipeline that does not depend on SSH, SCP, remote node switching, or plaintext credentials. The only official entry point is `run_dual_inference.py` located in the root directory.
 
-## 目录结构
+---
+
+## Directory Structure
 
 ```text
 DeepUMQA-G_github/
@@ -27,84 +29,97 @@ DeepUMQA-G_github/
 └── README.md
 ```
 
-## 运行要求
+---
 
-Python 依赖至少包括：
+## Requirements
 
-- Python 3.8+
-- PyTorch
-- PyTorch Geometric
-- NumPy
-- SciPy
-- pandas
-- tqdm
-- Biopython
+Minimum Python dependencies include:
 
-特征生成阶段可能用到的外部工具包括：
+* Python 3.8+
+* PyTorch
+* PyTorch Geometric
+* NumPy
+* SciPy
+* pandas
+* tqdm
+* Biopython
 
-- Foldseek
-- Voronota / Voronota-normal
-- ProteinMPNN
-- PyRosetta
+External tools that may be required during feature generation:
 
-这些工具不再写死在开发机路径里。你可以通过以下方式提供：
+* Foldseek
+* Voronota / Voronota-normal
+* ProteinMPNN
+* PyRosetta
 
-- 放到 `PATH`
-- 通过命令行参数传入
-- 通过环境变量传入
+These tools are no longer hardcoded to specific development machine paths. You can provide them via:
 
-## checkpoints
+* Adding them to your `PATH`
+* Passing paths through command-line arguments
+* Setting environment variables
 
-仓库内已保留当前示例可用的训练权重：
+---
+
+## Checkpoints
+
+A usable pretrained checkpoint is included:
 
 ```text
 ./checkpoints/val_best-epoch=26-val_loss=0.00057.ckpt
 ```
 
-也可以通过下面参数改用其他权重文件或目录：
+You can also specify a custom checkpoint file or directory:
 
 ```bash
 --ckpt-path /path/to/checkpoints
 ```
 
-如果 `--ckpt-path` 指向目录，程序会自动扫描其中的 `*.ckpt`、`*.pt`、`*.pth`。
+If `--ckpt-path` points to a directory, the program will automatically scan for `*.ckpt`, `*.pt`, and `*.pth` files.
 
-## example 目录说明
+---
+
+## Example Directory
 
 ```text
-example/pdb      示例输入模型
-example/query    对应 target 的 query/reference 模型
-example/feature  示例特征与运行缓存目录
-example/output   最终输出目录
+example/pdb      Example input models
+example/query    Corresponding target query/reference structures
+example/feature  Feature cache directory
+example/output   Final output directory
 ```
 
-仓库内已经放好一套可复用的 `example` 数据。直接跑示例时，程序会优先复用已有特征；如果你清空 `example/feature`，则需要本机具备完整特征生成环境。
+A complete reusable example dataset is provided. When running the example:
 
-## 最快使用方式
+* Existing features will be reused if available
+* If `example/feature` is cleared, a full feature generation environment is required locally
 
-直接运行：
+---
+
+## Quick Start
+
+Run directly:
 
 ```bash
 bash bin/run_pipeline.sh
 ```
 
-这个脚本默认就会使用：
+This script uses the following defaults:
 
-- `./example/pdb`
-- `./example/query`
-- `./example/feature`
-- `./example/output`
-- `./checkpoints`
+* `./example/pdb`
+* `./example/query`
+* `./example/feature`
+* `./example/output`
+* `./checkpoints`
 
-如果默认 `python` 不是你想用的环境，可以这样运行：
+If your default `python` is not the desired environment:
 
 ```bash
 DEEPUMQA_PYTHON_BIN=/path/to/python bash bin/run_pipeline.sh
 ```
 
-## 主入口用法
+---
 
-正式主入口仍然是：
+## Main Entry Usage
+
+The official entry point is:
 
 ```bash
 python run_dual_inference.py \
@@ -115,7 +130,7 @@ python run_dual_inference.py \
   --ckpt-path ./checkpoints
 ```
 
-如果你要显式指定环境里的 Python，也可以这样：
+To explicitly specify Python environments:
 
 ```bash
 python run_dual_inference.py \
@@ -130,84 +145,94 @@ python run_dual_inference.py \
   --pyrosetta-python /path/to/python
 ```
 
-## 输出结果
+---
 
-正常运行结束后，`output-root` 下只保留两个结果文件：
+## Output
 
-- `global_score.csv`
-- `interface_score.csv`
+After successful execution, only two result files are retained in `output-root`:
 
-中间运行目录默认写到：
+* `global_score.csv`
+* `interface_score.csv`
+
+Intermediate run directories are stored at:
 
 ```text
 <feature-root>/.runs/<run_id>
 ```
 
-如果不加 `--keep-temp`，运行结束后会自动清理临时目录。
+Unless `--keep-temp` is specified, temporary files will be automatically cleaned up after execution.
 
-## 常用参数
+---
 
-路径参数：
+## Common Parameters
 
-- `--pdb-root`
-- `--query-root`
-- `--feature-root`
-- `--output-root`
-- `--ckpt-path`
-- `--pdb-list`
-- `--ckpt-list`
+### Path Parameters
 
-工具路径参数：
+* `--pdb-root`
+* `--query-root`
+* `--feature-root`
+* `--output-root`
+* `--ckpt-path`
+* `--pdb-list`
+* `--ckpt-list`
 
-- `--python-bin`
-- `--foldseek-bin`
-- `--mpnn-python`
-- `--voro-python`
-- `--pyrosetta-python`
-- `--voro-exe-dir`
-- `--sp-template-db`
-- `--sp-monomer-template-db`
-- `--afdb-dir`
+### Tool Path Parameters
 
-运行控制参数：
+* `--python-bin`
+* `--foldseek-bin`
+* `--mpnn-python`
+* `--voro-python`
+* `--pyrosetta-python`
+* `--voro-exe-dir`
+* `--sp-template-db`
+* `--sp-monomer-template-db`
+* `--afdb-dir`
 
-- `--force`
-- `--keep-temp`
-- `--feature-workers`
-- `--interface-workers`
-- `--infer-workers`
-- `--cb-cutoff`
-- `--skip-feature-generation`
-- `--gpu-max-length`
-- `--max-length`
+### Runtime Control Parameters
 
-## 可选环境变量
+* `--force`
+* `--keep-temp`
+* `--feature-workers`
+* `--interface-workers`
+* `--infer-workers`
+* `--cb-cutoff`
+* `--skip-feature-generation`
+* `--gpu-max-length`
+* `--max-length`
 
-- `DEEPUMQA_PYTHON_BIN`
-- `DEEPUMQA_FOLDSEEK_BIN`
-- `DEEPUMQA_MPNN_PYTHON`
-- `DEEPUMQA_VORO_PYTHON`
-- `DEEPUMQA_PYROSETTA_PYTHON`
-- `DEEPUMQA_VORO_EXE_DIR`
-- `DEEPUMQA_SP_TEMPLATE_DB`
-- `DEEPUMQA_SP_MONOMER_TEMPLATE_DB`
-- `DEEPUMQA_AFDB_DIR`
+---
 
-`bin/run_pipeline.sh` 还支持这些示例目录覆盖环境变量：
+## Optional Environment Variables
 
-- `DEEPUMQA_PDB_ROOT`
-- `DEEPUMQA_QUERY_ROOT`
-- `DEEPUMQA_FEATURE_ROOT`
-- `DEEPUMQA_OUTPUT_ROOT`
-- `DEEPUMQA_CKPT_PATH`
+* `DEEPUMQA_PYTHON_BIN`
+* `DEEPUMQA_FOLDSEEK_BIN`
+* `DEEPUMQA_MPNN_PYTHON`
+* `DEEPUMQA_VORO_PYTHON`
+* `DEEPUMQA_PYROSETTA_PYTHON`
+* `DEEPUMQA_VORO_EXE_DIR`
+* `DEEPUMQA_SP_TEMPLATE_DB`
+* `DEEPUMQA_SP_MONOMER_TEMPLATE_DB`
+* `DEEPUMQA_AFDB_DIR`
 
-## 单机说明
+The `bin/run_pipeline.sh` script also supports overriding example paths:
 
-默认流程全部在当前机器执行。开源版主流程不再要求：
+* `DEEPUMQA_PDB_ROOT`
+* `DEEPUMQA_QUERY_ROOT`
+* `DEEPUMQA_FEATURE_ROOT`
+* `DEEPUMQA_OUTPUT_ROOT`
+* `DEEPUMQA_CKPT_PATH`
 
-- SSH 到其他节点
-- SCP 分发文件
-- 远程 host 跳转
-- 明文口令
+---
 
-如果你后续要自行扩展远程模式，请单独维护，不要把远程依赖放回默认主流程。
+## Standalone Execution
+
+The default pipeline runs entirely on a single machine. The open-source version does **not** require:
+
+* SSH access to remote nodes
+* SCP-based file transfer
+* Remote host switching
+* Plaintext credentials
+
+If you plan to extend the pipeline to support distributed or remote execution, maintain that separately and do not reintroduce remote dependencies into the default workflow.
+
+---
