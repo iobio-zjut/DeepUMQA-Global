@@ -35,6 +35,10 @@ Download [Singularity container](https://zenodo.org/api/records/19888061/draft/f
   - Template database for SAGS feature extraction (complex)
 - **PDB_AFDB_207187**([PDB_AFDB_207187](http://zhanglab-bioinf.com/PAthreader/database/PDB_AFDB_207187.tar))
   - Template database for SAGS feature extraction (monomer)
+- **PDB_AFDB_db** (Foldseek-formatted database converted from PDB_AFDB_207187)  
+  Build the Foldseek database using:
+  ```bash
+  foldseek createdb PDB_AFDB_207187 PDB_AFDB_db
 
 ---
 
